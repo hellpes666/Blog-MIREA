@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-interface IPost extends Document {
-	creator: { type: typeof Schema.Types; ref: string };
+export interface IPost {
+	creator: mongoose.Schema.Types.ObjectId;
 
 	post: {
 		title: string;
@@ -13,27 +13,30 @@ interface IPost extends Document {
 	updatedAt?: Date;
 }
 
-const postSchema = new Schema<IPost>(
+interface PostSchema extends IPost, Document {}
+
+const postSchema = new Schema<PostSchema>(
 	{
 		creator: {
-			type: Schema.Types.ObjectId,
+			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
+			required: true,
 		},
 
 		post: {
 			title: {
 				type: String,
-				require: true,
+				required: true,
 				minLength: 6,
 				maxLength: 256,
 			},
 			themes: {
 				type: [String],
-				require: true,
+				required: true,
 				minLength: 1,
 				maxLength: 12,
 			},
-			description: { type: String, require: true, minLength: 250 },
+			description: { type: String, required: true, minLength: 250 },
 		},
 	},
 	{ timestamps: true }

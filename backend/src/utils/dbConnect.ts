@@ -9,7 +9,7 @@ export const DbConnect = async () => {
 				componentName: "utils/dbConnect",
 			});
 		}
-		const conn = await mongoose.connect(process.env.MONGODB_URL2 as string);
+		const conn = await mongoose.connect(process.env.MONGODB_URL as string);
 
 		console.log("MongoDB connected: " + conn.connection.host);
 	} catch (error) {

@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { articleRouter } from "@routes/article.route";
+import { DbConnect } from "./utils";
 
 dotenv.config();
 
@@ -15,4 +16,5 @@ app.use("/api/articles", articleRouter);
 
 app.listen(port, () => {
 	console.log(`[server]: Server is running at http://localhost:${port}`);
+	DbConnect();
 });

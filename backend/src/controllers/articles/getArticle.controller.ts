@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-export const getArticles = async (req: Request, res: Response) => {
+export const getArticle = async (req: Request, res: Response) => {
 	try {
-		res.send({ message: "Ты крут" });
+		res.send({ message: "Get Article" });
 	} catch (error) {}
 };

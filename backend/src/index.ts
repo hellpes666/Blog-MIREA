@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { articleRouter } from "@routes/article.route";
 import { DbConnect } from "./utils";
 import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.get("/", (req: Request, res: Response) => {
 	res.send("Express + TypeScript Server");

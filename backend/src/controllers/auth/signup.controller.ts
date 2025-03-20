@@ -44,7 +44,7 @@ export const signup = async (req: Request, res: Response) => {
 			componentName: "controllers/auth/signup.controller.ts",
 		});
 		res.status(500).json({
-			message: "Произошла ошибка на стороне сервера. Уже устраняем.",
+			message: "Кажется произошла ошибка на сервере. Пожалуйста, попробуйте снова.",
 			error: error,
 		});
 	}

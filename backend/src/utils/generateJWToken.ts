@@ -14,7 +14,7 @@ export const generateJWToken = ({ userId, res }: IGenerateTokenJWTParams) => {
 			componentName: "utils/generateJWToken.ts",
 		});
 	}
-	const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+	const token = jwt.sign({ userId }, process.env.JWT_SECRET as string, {
 		expiresIn: "1d",
 	});
 

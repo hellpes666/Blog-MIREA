@@ -1,48 +1,51 @@
+import User from "@models/User";
 import { Request, Response } from "express";
 import { handleError } from "src/utils";
-import { z } from "zod";
-
-const userSignupSchema = z.object({
-	email: z.string().email("Пожалуйста, введите корректный email."),
-	firstName: z
-		.string()
-		.min(
-			1,
-			"Имя должно содержать минимум одну заглавную и одну строчную букву."
-		)
-		.regex(
-			/^(?=.*[А-Я])(?=.*[а-я]).+$/,
-			"Имя должно содержать минимум одну заглавную и одну строчную букву."
-		),
-	lastName: z
-		.string()
-		.min(1, "Фамилия должна содержать хотя бы одну букву.")
-		.regex(
-			/^(?=.*[А-Я])(?=.*[а-я]).+$/,
-			"Фамилия должна содержать минимум одну заглавную и одну строчную букву."
-		),
-	password: z
-		.string()
-		.min(8, "Пароль должен содержать не менее 8 символов.")
-		/*
-		(?=.*[a-zа-я]) — минимум одна строчная буква.
-		(?=.*[A-ZА-Я]) — минимум одна заглавная буква.
-		(?=.*\d) — минимум одна цифра.
-		(?=.*[!@#$%^&*(),.?":{}|<>]) — минимум один специальный символ.
-		*/
-		.regex(
-			/^(?=.*[a-zа-я])(?=.*[A-ZА-Я])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
-			"Пароль должен содержать минимум одну строчную и одну заглавную букву, одну цифру и один специальный символ."
-		),
-});
+import bcrypt from "bcryptjs";
+import { userSignupSchema } from "./schemas";
+import { generateJWToken } from "src/utils/generateJWToken";
 
 export const signup = async (req: Request, res: Response) => {
 	try {
 		const parsedData = userSignupSchema.parse(req.body);
+
+		const user = await User.exists({
+			email: parsedData.email,
+		});
+
+		if (user) {
+			res.status(400).json({
+				message: "Пользователь уже зарегистрирован.",
+			});
+		}
+
+		const salt = await bcrypt.genSalt(15);
+		const hashedPassword = await bcrypt.hash(parsedData.password, salt);
+
+		const newUser = await User.create({
+			email: parsedData.email,
+			firstName: parsedData.firstName,
+			lastName: parsedData.lastName,
+			password: hashedPassword,
+		});
+
+		generateJWToken({ userId: newUser._id, res });
+
+		res.status(201).json({
+			message: "Пользователь успешно создан!",
+			_id: newUser._id,
+			firstName: newUser.firstName,
+			lastName: newUser.lastName,
+			email: newUser.email,
+		});
 	} catch (error) {
 		handleError({
 			error,
 			componentName: "controllers/auth/signup.controller.ts",
+		});
+		res.status(500).json({
+			message: "Произошла ошибка на стороне сервера. Уже устраняем.",
+			error: error,
 		});
 	}
 };

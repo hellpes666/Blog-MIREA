@@ -4,6 +4,7 @@ import { articleRouter } from "@routes/article.route";
 import { DbConnect } from "./utils";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
+import { authRouter } from "@routes/auth.route";
 
 dotenv.config();
 
@@ -19,6 +20,8 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/api/articles", articleRouter);
+
+app.use("/api/auth", authRouter);
 
 app.listen(port, () => {
 	console.log(`[server]: Server is running at http://localhost:${port}`);

@@ -5,7 +5,7 @@ import { handleError } from "src/utils";
 export const deleteArticle = async (req: Request, res: Response) => {
 	try {
 		//@ts-ignore
-		const { id } = req.params.id;
+		const { id } = req.params;
 
 		await Post.findByIdAndDelete({
 			_id: id,

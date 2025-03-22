@@ -3,13 +3,8 @@ import User, { IUser } from "@models/User";
 import { Request, Response } from "express";
 import { handleError } from "src/utils";
 
-interface IAuthUser {
-	user: Omit<IUser, "password">;
-}
-
 interface ICreateRequest extends Request {
 	body: IPost;
-	user?: IAuthUser;
 }
 
 export const createArticle = async (req: ICreateRequest, res: Response) => {
@@ -18,19 +13,24 @@ export const createArticle = async (req: ICreateRequest, res: Response) => {
 
 		//@ts-ignore
 		const { _id } = req.user;
-		const user = await User.findById({ _id });
-		if (!user) {
+		const userData = await User.findById({ _id })
+			.select("-password")
+			.select("-createdAt")
+			.select("-updatedAt")
+			.select("--email");
+		if (!userData) {
 			res.status(401).json({
 				message: "Пожалуйста проверьте, что вы были авторизованы.",
 			});
 		}
+		//@ts-ignore
+		post.user = userData;
 
 		const newPost = new Post({
-			creator: user,
 			post,
 		});
-
 		await newPost.save(); // save in DB
+
 		res.status(201).json({ newPost });
 	} catch (error) {
 		handleError({

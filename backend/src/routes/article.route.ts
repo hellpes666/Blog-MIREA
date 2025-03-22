@@ -5,6 +5,7 @@ import {
 	updateArticle,
 } from "@controllers/articles";
 import { getArticle } from "@controllers/articles/getArticle.controller";
+import { ensureAuthUserMiddleware } from "@middleware/ensureAuthUser.middleware";
 import express, { Router } from "express";
 
 export const articleRouter: Router = express.Router();
@@ -12,10 +13,10 @@ export const articleRouter: Router = express.Router();
 // add middleware to make sure what user was authorized
 articleRouter.get("/", getArticles);
 
-articleRouter.get("/:id", getArticle);
+articleRouter.get("/:id", ensureAuthUserMiddleware, getArticle);
 
-articleRouter.put("/:id", updateArticle);
+articleRouter.put("/:id", ensureAuthUserMiddleware, updateArticle);
 
-articleRouter.post("/:id", createArticle);
+articleRouter.post("/:id", ensureAuthUserMiddleware, createArticle);
 
-articleRouter.delete("/:id", deleteArticle);
+articleRouter.delete("/:id", ensureAuthUserMiddleware, deleteArticle);

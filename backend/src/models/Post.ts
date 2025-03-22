@@ -21,22 +21,32 @@ const postSchema = new Schema<PostSchema>(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "User",
 			required: true,
+			userData: {
+				firstName: {
+					type: String,
+					required: true,
+				},
+				lastName: {
+					type: String,
+					required: true,
+				},
+			},
 		},
 
 		post: {
 			title: {
 				type: String,
 				required: true,
-				minLength: 6,
-				maxLength: 256,
+				minlength: 6,
+				maxlength: 256,
 			},
 			themes: {
 				type: [String],
 				required: true,
-				minLength: 1,
-				maxLength: 12,
+				minlength: 1,
+				maxlength: 12,
 			},
-			description: { type: String, required: true, minLength: 250 },
+			description: { type: String, required: true, minlength: 250 },
 		},
 	},
 	{ timestamps: true }

@@ -1,4 +1,10 @@
 @import "tailwindcss";
 @plugin "daisyui" {
-  themes: all;
+    themes: all;
 }
+
+html,
+#root {
+    height: 100dvh;
+}
+

@@ -8,12 +8,12 @@ function App() {
 
     return (
         <div
-            className="flex h-full w-full flex-col gap-12 overflow-hidden px-6 py-6 sm:px-12 lg:px-24"
+            className="flex h-full w-full flex-col gap-12 px-6 py-6 sm:px-12 lg:px-24"
             data-theme={theme}
         >
             <header className="flex items-center justify-between">
                 <Link
-                    className="ring-primary relative text-2xl font-black"
+                    className="bg-neutral text-neutral-content relative rounded-xl px-6 py-1 text-2xl font-black uppercase"
                     to="/"
                 >
                     Blog
@@ -41,7 +41,7 @@ function App() {
                     </div>
                 </div>
             </header>
-            <main>
+            <main className="h-full">
                 <Routes>
                     <Route path="/" element={<HomePage />} />
                     <Route path="/settings" element={<SettingsPage />} />
